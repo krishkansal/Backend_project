@@ -73,17 +73,17 @@
 					color:white;}
 			</style>
 	<body>
-	<form>
+	<form action="/login" method="post" >
 	    <center>
 		<div class="login-box">
 		<h1>Login</h1>
 		<div class="textbox">
 		<i class="fas fa-envelope"></i>
-		<input type='email' placeholder='Email' name='' value='' required >
+		<input type='email' placeholder='Email' name='email' value='' required >
 		</div>
 		<div class="textbox">
 		<i class="fas fa-lock"></i>
-		<input type='password' placeholder='Password' name='' value='' required >
+		<input type='password' placeholder='Password' name="password" value='' required >
 		</div>
 		<input id="button1" type="submit" name='' value='Login'></input>
 		<a class='fp' href='#'>FORGOT PASSWORD</a>
