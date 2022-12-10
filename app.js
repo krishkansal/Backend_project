@@ -25,6 +25,33 @@ app.get('/login',(req,res)=>{
     return res.redirect("login.html");
 
 })
+
+
+app.post('/login',async (req,res)=>{
+    try{
+
+        const Email=req.body.email;
+        const Password=req.body.password;
+
+       // console.log(`${Email} and password is ${Password}`);
+
+       const useremail = await data.findOne({email:Email});
+        if(useremail.password === Password){
+            res.status(201).redirect("Main Page.html");
+        }else{
+            res.send("Invalid Login Details");
+        }
+       
+    }catch(error){
+        res.status(400).send("Invalid Login Details")
+    }
+    
+})
+
+
+
+
+
 app.get('/signup',(req,res)=>{
     
     return res.redirect("signup.html");
