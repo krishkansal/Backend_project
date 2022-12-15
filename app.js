@@ -1,5 +1,6 @@
 const express=require("express")
 const bodyParser = require("body-parser")
+const bcrypt=require("bcrypt");
 require("./DB/conn");
 const data=require("./model/signup")
 const app=express()
@@ -36,7 +37,13 @@ app.post('/login',async (req,res)=>{
        // console.log(`${Email} and password is ${Password}`);
 
        const useremail = await data.findOne({email:Email});
-        if(useremail.password === Password){
+
+       //Password Hashing (Match Password)
+
+       const matchpassword = await bcrypt.compare(Password,useremail.password);
+
+
+        if(matchpassword){
             res.status(201).redirect("Main Page.html");
         }else{
             res.send("Invalid Login Details");
@@ -90,11 +97,11 @@ app.get('/signup',(req,res)=>{
 
 
 app.post("/signup",(req,res)=>{
-    console.log(req.body.name);
-    console.log(req.body.phone);
-    console.log(req.body.email);
-    console.log(req.body.password);
-    console.log(req.body.cpassword);
+    // console.log(req.body.name);
+    // console.log(req.body.phone);
+    // console.log(req.body.email);
+    // console.log(req.body.password);
+    // console.log(req.body.cpassword);
 
     const password=req.body.password;
     const cpassword=req.body.cpassword;
@@ -109,7 +116,7 @@ app.post("/signup",(req,res)=>{
         cpassword: req.body.cpassword
     })
         
-
+        // Password Hashing
     
     users.save()
     .then(()=>{ res.status(201).redirect("Main Page.html");})
