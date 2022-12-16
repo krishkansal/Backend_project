@@ -50,7 +50,7 @@ app.post('/login',async (req,res)=>{
         }
        
     }catch(error){
-        res.status(400).send("Invalid Login Details")
+        res.status(400).send("Record not found")
     }
     
 })
@@ -97,34 +97,44 @@ app.get('/signup',(req,res)=>{
 
 
 app.post("/signup",(req,res)=>{
-    // console.log(req.body.name);
-    // console.log(req.body.phone);
-    // console.log(req.body.email);
-    // console.log(req.body.password);
-    // console.log(req.body.cpassword);
+    console.log(req.body.name);
+    console.log(req.body.phone);
+    console.log(req.body.email);
+    console.log(req.body.password);
+    console.log(req.body.cpassword);
 
     const password=req.body.password;
     const cpassword=req.body.cpassword;
 
-    if(password===cpassword){
 
-    const users=new data({
-        name: req.body.name,
-        phone: req.body.phone,
-        email: req.body.email,
-        password: req.body.password,
-        cpassword: req.body.cpassword
+    data.find({email:req.body.email})
+    .then(result=>{
+        if(result.length!==0){
+              // Email already exist
+              res.send({message:'Email already exist,try again with different email'})
+        }else if(password===cpassword){
+            const users=new data({
+                name: req.body.name,
+                phone: req.body.phone,
+                email: req.body.email,
+                password: req.body.password,
+                cpassword: req.body.cpassword
+            })
+            
+             //Password Hashing
+
+            users.save()
+            .then(()=>{ res.status(201).redirect("Main Page.html");})
+            .catch((e) => {res.status(400).json(e);})
+
+        }else{
+            res.send("password are not matching")
+        }
     })
-        
-        // Password Hashing
-    
-    users.save()
-    .then(()=>{ res.status(201).redirect("Main Page.html");})
-    .catch((e) => {res.status(400).json(e);})
-    }else{
-        res.send("password are not matching")
-    }
-})
+     .catch(err => res.status(500).json( {message: 'Server Encountered an Error', error: err} ))  
+
+    })
+
 
 
 
